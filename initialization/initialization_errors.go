@@ -8,7 +8,6 @@ import (
 var (
 	ErrAlreadyInitializing          = errors.New("already initializing")
 	ErrCannotResetWhileInitializing = errors.New("cannot reset while initializing")
-	ErrStateMetadataFileMissing     = errors.New("metadata file is missing")
 )
 
 type ErrReferenceLabelMismatch struct {

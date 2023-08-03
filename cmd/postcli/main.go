@@ -298,8 +298,8 @@ func cmdVerifyPos(opts config.InitOpts, fraction float64, logger *zap.Logger) {
 	}
 	pub := ed25519.NewKeyFromSeed(dst[:ed25519.SeedSize]).Public().(ed25519.PublicKey)
 
-	metafile := filepath.Join(opts.DataDir, initialization.MetadataFileName)
-	meta, err := initialization.LoadMetadata(opts.DataDir)
+	metafile := filepath.Join(opts.DataDir, shared.MetadataFileName)
+	meta, err := shared.LoadMetadata(opts.DataDir)
 	if err != nil {
 		log.Fatalf("failed to load metadata from %s: %s\n", opts.DataDir, err)
 	}

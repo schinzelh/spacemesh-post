@@ -93,7 +93,7 @@ func TestInitialize_BeforeNonceValue(t *testing.T) {
 	cancel()
 	require.Equal(t, uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit, init.NumLabelsWritten())
 
-	meta, err := LoadMetadata(opts.DataDir)
+	meta, err := shared.LoadMetadata(opts.DataDir)
 	require.NoError(t, err)
 	require.NotNil(t, meta.Nonce)
 	require.NotNil(t, meta.NonceValue)
@@ -101,7 +101,7 @@ func TestInitialize_BeforeNonceValue(t *testing.T) {
 
 	// delete nonce value
 	meta.NonceValue = nil
-	require.NoError(t, SaveMetadata(opts.DataDir, meta))
+	require.NoError(t, shared.SaveMetadata(opts.DataDir, meta))
 
 	// just creating a new initializer should update the metadata
 	init, err = NewInitializer(
@@ -114,7 +114,7 @@ func TestInitialize_BeforeNonceValue(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, init)
 
-	meta, err = LoadMetadata(opts.DataDir)
+	meta, err = shared.LoadMetadata(opts.DataDir)
 	require.NoError(t, err)
 	require.NotNil(t, meta.Nonce)
 	require.NotNil(t, meta.NonceValue)
@@ -199,7 +199,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	r.NoError(init.Initialize(context.Background()))
 	r.Equal(uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit, init.NumLabelsWritten())
 
-	m, err := LoadMetadata(opts.DataDir)
+	m, err := shared.LoadMetadata(opts.DataDir)
 	r.NoError(err)
 	r.Equal(origNonce, *m.Nonce)
 	r.EqualValues(origNonceValue, m.NonceValue)
@@ -208,7 +208,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	// lastPos lower than numLabels is ignored
 	m.LastPosition = new(uint64)
 	*m.LastPosition = uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit - 10
-	r.NoError(SaveMetadata(opts.DataDir, m))
+	r.NoError(shared.SaveMetadata(opts.DataDir, m))
 
 	init, err = NewInitializer(
 		WithNodeId(nodeId),
@@ -222,7 +222,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	r.NoError(init.Initialize(context.Background()))
 	r.Equal(uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit, init.NumLabelsWritten())
 
-	m, err = LoadMetadata(opts.DataDir)
+	m, err = shared.LoadMetadata(opts.DataDir)
 	r.NoError(err)
 	r.Equal(origNonce, *m.Nonce)
 
@@ -232,7 +232,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	// the range of the PoST
 	m.Nonce = nil
 	m.LastPosition = nil
-	r.NoError(SaveMetadata(opts.DataDir, m))
+	r.NoError(shared.SaveMetadata(opts.DataDir, m))
 
 	init, err = NewInitializer(
 		WithNodeId(nodeId),
@@ -246,7 +246,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	r.NoError(init.Initialize(context.Background()))
 	r.Equal(uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit, init.NumLabelsWritten())
 
-	m, err = LoadMetadata(opts.DataDir)
+	m, err = shared.LoadMetadata(opts.DataDir)
 	r.NoError(err)
 	r.NotNil(m.Nonce)
 	r.NotNil(m.NonceValue)
@@ -266,7 +266,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	lastPos := *m.Nonce + 10
 	*m.LastPosition = lastPos
 	m.Nonce = nil
-	r.NoError(SaveMetadata(opts.DataDir, m))
+	r.NoError(shared.SaveMetadata(opts.DataDir, m))
 
 	init, err = NewInitializer(
 		WithNodeId(nodeId),
@@ -280,7 +280,7 @@ func TestInitialize_ContinueWithLastPos(t *testing.T) {
 	r.NoError(init.Initialize(context.Background()))
 	r.Equal(uint64(cfg.MinNumUnits)*cfg.LabelsPerUnit, init.NumLabelsWritten())
 
-	m, err = LoadMetadata(opts.DataDir)
+	m, err = shared.LoadMetadata(opts.DataDir)
 	r.NoError(err)
 	r.NotNil(m.Nonce)
 	r.NotNil(m.LastPosition)
@@ -1028,7 +1028,7 @@ func TestInitializeSubset_NoNonce(t *testing.T) {
 	require.Nil(t, init.Nonce())
 	require.Nil(t, init.NonceValue())
 
-	meta, err := LoadMetadata(opts.DataDir)
+	meta, err := shared.LoadMetadata(opts.DataDir)
 	require.NoError(t, err)
 	require.Nil(t, meta.Nonce)
 

@@ -54,7 +54,7 @@ func SearchForNonce(ctx context.Context, cfg Config, initOpts InitOpts, opts ...
 	}
 	logger := options.logger
 
-	metadata, err := LoadMetadata(initOpts.DataDir)
+	metadata, err := shared.LoadMetadata(initOpts.DataDir)
 	if err != nil {
 		return 0, nil, fmt.Errorf("failed to load metadata: %w", err)
 	}
@@ -146,7 +146,7 @@ func persistNonce(nonce uint64, label []byte, metadata *shared.PostMetadata, dat
 	logger.Info("found nonce: updating postdata_metadata.json", zap.Uint64("nonce", nonce), zap.String("NonceValue", hex.EncodeToString(label)))
 	metadata.Nonce = &nonce
 	metadata.NonceValue = shared.NonceValue(label)
-	if err := SaveMetadata(datadir, metadata); err != nil {
+	if err := shared.SaveMetadata(datadir, metadata); err != nil {
 		return fmt.Errorf("failed to save metadata: %w", err)
 	}
 	return nil
