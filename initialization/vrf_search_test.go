@@ -21,7 +21,7 @@ func TestCheckLabel(t *testing.T) {
 		oracle.WithProviderID(&cpuProviderID),
 		oracle.WithCommitment(make([]byte, 32)),
 		oracle.WithVRFDifficulty(make([]byte, 32)),
-		oracle.WithScryptParams(config.ScryptParams{
+		oracle.WithScryptParams(shared.ScryptParams{
 			N: 2,
 			R: 1,
 			P: 1,
