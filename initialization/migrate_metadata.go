@@ -84,6 +84,7 @@ type postMetadataV0 struct {
 // - add version field to postdata_metadata.json (missing in version 0)
 // - add NonceValue field to postdata_metadata.json if missing (was introduced before migrations, not every PoST version 0 metadata file has it)
 // - re-encode NodeId and CommitmentAtxId as hex strings.
+// - add Scrypt field to postdata_metadata.json (missing in version 0), assume default mainnet values.
 func migrateV0(dir string, logger *zap.Logger) (err error) {
 	filename := filepath.Join(dir, MetadataFileName)
 	file, err := os.Open(filename)
