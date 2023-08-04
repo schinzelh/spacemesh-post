@@ -409,7 +409,7 @@ func removeRedundantFiles(cfg config.Config, opts config.InitOpts, logger *zap.L
 	for _, file := range files {
 		name := file.Name()
 		fileIndex, err := shared.ParseFileIndex(name)
-		if err != nil && name != shared.MetadataFileName {
+		if err != nil && name != MetadataFileName {
 			// TODO(mafa): revert back to warning, see https://github.com/spacemeshos/go-spacemesh/issues/4789
 			logger.Debug("found unrecognized file", zap.String("fileName", name))
 			continue
@@ -460,7 +460,7 @@ func (init *Initializer) Reset() error {
 			continue
 		}
 		name := file.Name()
-		if shared.IsInitFile(info) || name == shared.MetadataFileName {
+		if shared.IsInitFile(info) || name == MetadataFileName {
 			path := filepath.Join(init.opts.DataDir, name)
 			if err := os.Remove(path); err != nil {
 				return fmt.Errorf("failed to delete file (%v): %w", path, err)
@@ -692,10 +692,10 @@ func (init *Initializer) saveMetadata() error {
 	if init.nonceValue.Load() != nil {
 		v.NonceValue = *init.nonceValue.Load()
 	}
-	return shared.SaveMetadata(init.opts.DataDir, &v)
+	return SaveMetadata(init.opts.DataDir, &v)
 }
 
 func (init *Initializer) loadMetadata() (*shared.PostMetadata, error) {
 	// TODO(mafa): migrate metadata if needed before loading it
-	return shared.LoadMetadata(init.opts.DataDir)
+	return LoadMetadata(init.opts.DataDir)
 }

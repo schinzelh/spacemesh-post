@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/spacemeshos/post/config"
+	"github.com/spacemeshos/post/initialization"
 	"github.com/spacemeshos/post/shared"
 )
 
@@ -38,7 +39,7 @@ type OptionFunc func(*option) error
 // WithDataSource sets the data source to use for the proof.
 func WithDataSource(cfg config.Config, nodeId, commitmentAtxId []byte, datadir string) OptionFunc {
 	return func(o *option) error {
-		m, err := shared.LoadMetadata(datadir)
+		m, err := initialization.LoadMetadata(datadir)
 		if err != nil {
 			return err
 		}

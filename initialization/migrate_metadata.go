@@ -29,11 +29,11 @@ type MetadataVersion struct {
 func MigratePoST(dir string, logger *zap.Logger) (err error) {
 	logger.Info("checking PoST for migrations")
 
-	filename := filepath.Join(dir, shared.MetadataFileName)
+	filename := filepath.Join(dir, MetadataFileName)
 	file, err := os.Open(filename)
 	switch {
 	case os.IsNotExist(err):
-		return shared.ErrStateMetadataFileMissing
+		return ErrStateMetadataFileMissing
 	case err != nil:
 		return fmt.Errorf("could not open metadata file: %w", err)
 	}
@@ -85,11 +85,11 @@ type postMetadataV0 struct {
 // - add NonceValue field to postdata_metadata.json if missing (was introduced before migrations, not every PoST version 0 metadata file has it)
 // - re-encode NodeId and CommitmentAtxId as hex strings.
 func migrateV0(dir string, logger *zap.Logger) (err error) {
-	filename := filepath.Join(dir, shared.MetadataFileName)
+	filename := filepath.Join(dir, MetadataFileName)
 	file, err := os.Open(filename)
 	switch {
 	case os.IsNotExist(err):
-		return shared.ErrStateMetadataFileMissing
+		return ErrStateMetadataFileMissing
 	case err != nil:
 		return fmt.Errorf("could not read metadata file: %w", err)
 	}
